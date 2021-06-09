@@ -1,9 +1,8 @@
+# DNS Scanner
 #
-#
-#
-#
-#
-
+#  Parameter
+#  IP : Reverse DNS Lookup
+#  Domain : IP Lookup
 from netaddr import *
 from socket import *
 
