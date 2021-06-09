@@ -4,8 +4,6 @@
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 from netaddr import *
 from socket import *
-import subprocess
-import time
 
 def portscan(targetip, targetport):
     sock = socket(AF_INET, SOCK_STREAM)
