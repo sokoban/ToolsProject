@@ -1,5 +1,4 @@
 '''
-
 # ipwhois :
 # install : https://ipwhois.readthedocs.io/en/latest/README.html
 # usage :
@@ -13,8 +12,6 @@ asn_date : 2003-05-30
 asn_description : SKB-AS SK Broadband Co Ltd, KR
 query : 221.143.42.85
 '''
-
-
 import logging
 import socket
 from ipwhois import IPWhois
@@ -58,11 +55,16 @@ if __name__ == '__main__':
 
         if valid == "Other":
 
+            if ip.find("http://") or ip.find("https://"):
+                ip = ip.strip("http://")
+                ip = ip.strip("https://")
+
             # 175.126.123.247:8000 process
             if ip.find(':'):
                 ret = ip.split(sep=':')
                 ip = ret[0]
-            valid = validIPAddress(ip)
+                valid = validIPAddress(ip)
+
             if valid == "Other":
                 if ip.find('/'):
                     ret = ip.split(sep='/')
