@@ -1,11 +1,22 @@
-# This is a sample Python script.
+'''
 
 # ipwhois :
 # install : https://ipwhois.readthedocs.io/en/latest/README.html
 # usage :
+# author : sokoban
+
+asn_registry : apnic
+asn : 9318
+asn_cidr : 221.140.0.0/14
+asn_country_code : KR
+asn_date : 2003-05-30
+asn_description : SKB-AS SK Broadband Co Ltd, KR
+query : 221.143.42.85
+'''
+
 
 import logging
-import re
+import socket
 from ipwhois import IPWhois
 
 LOG_FORMAT = ('[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)s] '
@@ -32,7 +43,7 @@ def validIPAddress(IP):
         return "IPv4"
     if IP.count(":") == 7 and all(isIPv6(i) for i in IP.split(":")):
         return "IPv6"
-    return "Neither"
+    return "Other"
 
 
 # Press the green button in the gutter to run the script.
@@ -42,31 +53,45 @@ if __name__ == '__main__':
     lines = f.readlines()
 
     for line in lines:
-        ip = line.rstrip('\n') #IPNetwork(line)
+        ip = line.rstrip('\n')
+        valid = validIPAddress(ip)
 
-        print( validIPAddress(ip) )
-        #aa = re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip)
-        #if aa:
-        #    ip = aa.group()
+        if valid == "Other":
 
-        log.debug('Basic str test: {0}'.format(ip))
-        obj = IPWhois(ip)
-        results = obj.lookup_rdap(depth=1)
-        print('{0} : asn_registry : {1}, asn_cidr : {2}, asn_Country : {3}, date : {4}, desc : {5} '
-              .format(ip, results['asn_registry'], results['asn_cidr'], results['asn_country_code'], results['asn_date'], results['asn_description']))
+            # 175.126.123.247:8000 process
+            if ip.find(':'):
+                ret = ip.split(sep=':')
+                ip = ret[0]
+            valid = validIPAddress(ip)
+            if valid == "Other":
+                if ip.find('/'):
+                    ret = ip.split(sep='/')
+                    ip = ret[0]
 
+                if ip.find('?'):
+                    ip = ip.strip('?')
+                ip = ip.strip('"')
+                domain = ip
+                try:
+                    ip = socket.gethostbyname(ip)
+                    domain = domain + ":" + ip
+                except:
+                    print('{0} Domain host resolve Fail'.format(ip))
+                    continue
 
-
-'''
-asn_registry : apnic
-asn : 9318
-asn_cidr : 221.140.0.0/14
-asn_country_code : KR
-asn_date : 2003-05-30
-asn_description : SKB-AS SK Broadband Co Ltd, KR
-query : 221.143.42.85
-'''
-
-
-
-
+        try:
+            log.debug('Basic str test: {0}'.format(ip))
+            obj = IPWhois(ip)
+            results = obj.lookup_rdap(depth=1)
+            if valid == "Other":
+                print('{0} : asn_registry : {1}, asn_cidr : {2}, asn_Country : {3}, date : {4}, desc : {5} '
+                    .format(domain, results['asn_registry'], results['asn_cidr'], results['asn_country_code'], results['asn_date'], results['asn_description']))
+            else:
+                print('{0} : asn_registry : {1}, asn_cidr : {2}, asn_Country : {3}, date : {4}, desc : {5} '
+                    .format(ip, results['asn_registry'], results['asn_cidr'], results['asn_country_code'], results['asn_date'], results['asn_description']))
+        except:
+            if valid == "Other":
+                print('{0} ip whois Fail'.format(domain))
+            else:
+                print('{0} ip whois Fail'.format(ip))
+            continue
