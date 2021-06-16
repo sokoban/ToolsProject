@@ -56,8 +56,8 @@ if __name__ == '__main__':
         if valid == "Other":
 
             if ip.find("http://") or ip.find("https://"):
-                ip = ip.strip("http://")
-                ip = ip.strip("https://")
+                ip = ip.lstrip("http://")
+                ip = ip.lstrip("https://")
 
             # 175.126.123.247:8000 process
             if ip.find(':'):
@@ -74,6 +74,7 @@ if __name__ == '__main__':
                     ip = ip.strip('?')
                 ip = ip.strip('"')
                 domain = ip
+
                 try:
                     ip = socket.gethostbyname(ip)
                     domain = domain + ":" + ip

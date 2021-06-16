@@ -26,7 +26,7 @@ def All_ipv4_address(subnet):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    f = open("./iplist.txt", "r")
+    f = open("./iplist_port.txt", "r")
     fr = open("./portlist.txt", "r")
     lines = f.readlines()
     ports = fr.readlines()
