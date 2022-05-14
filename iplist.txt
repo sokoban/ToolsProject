@@ -1,9 +1,1 @@
-daum.net
-www.daum.net
-221.143.42.85
-210.219.197.4
-58.229.184.149
-175.126.123.247:8000
-https://www.naver.com
-2001:2d8:ee83:73da:60f0:cf64:bd94:acd9
-https://www.exploit-db.com/exploits/50011
+154.54.249.202
